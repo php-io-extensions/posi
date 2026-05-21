@@ -9,6 +9,7 @@ if test "$PHP_POSI" = "yes"; then
 	fi
 
 	AC_DEFINE(HAVE_POSI, 1, [Whether you have Posi])
+	CFLAGS="$CFLAGS -Wno-error=incompatible-pointer-types -Wno-incompatible-pointer-types -Wno-pointer-compare -Wno-error=int-conversion"
 	posi_sources="posi.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c posi/system.zep.c src/system-api.c"
 	PHP_NEW_EXTENSION(posi, $posi_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
