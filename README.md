@@ -2,6 +2,8 @@
 
 This project provides bindings to the UNIX Portable Operating System Interface (POSIX).
 
+Extension repository: [https://github.com/php-io-extensions/posi](https://github.com/php-io-extensions/posi)
+
 ## Highlights
 
 * Retrieve file descriptors to replace `fopen`
@@ -65,6 +67,18 @@ System::close($fd);
 ```
 
 `open()`, `fcntl()`, and `ioctl()` take the same flag and command constants as C (`O_RDONLY`, `F_GETFL`, and so on). Define them in PHP or load them from your platform headers; values differ by OS.
+
+### C-ish global helper style
+
+This extension can also be used in a C-ish style through global helper methods by installing [`microscrap/posix`](https://github.com/microscrap/posix).
+
+```bash
+composer require microscrap/posix
+```
+
+That package wraps `Posi\System` and exposes global functions like `posix_open`, `posix_read`, and `posix_write`. See the repository for details: [https://github.com/microscrap/posix](https://github.com/microscrap/posix).
+
+You can also roll your own helper layer, or use this extension directly without helper packages.
 
 ---
 
