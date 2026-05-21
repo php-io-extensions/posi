@@ -1,0 +1,31 @@
+{
+    "name": "php-io-extensions/posi",
+    "type": "php-ext",
+    "description": "PHP-Controllable UNIX POSIX Extension",
+    "license": "MIT",
+    "version": "0.4.1",
+    "authors": [
+        {
+            "name": "Project Saturn Studios, LLC",
+            "email": "info@projectsaturnstudios.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    },
+    "php-ext": {
+        "extension-name": "posi",
+        "priority": 30,
+        "build-path": "ext",
+        "support-zts": true,
+        "support-nts": true,
+        "os-families-exclude": ["windows"],
+        "configure-options": [
+            {
+                "name": "enable-posi",
+                "description": "Enable the posi extension",
+                "needs-value": false
+            }
+        ]
+    }
+}
