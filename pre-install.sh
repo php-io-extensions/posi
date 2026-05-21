@@ -42,4 +42,12 @@ clang_files=("${CLANG_DIR}/"*)
 [ "${#clang_files[@]}" -gt 0 ] || die "No files found in ${CLANG_DIR}/"
 cp -R "${clang_files[@]}" "$EXT_DIR/"
 
+echo "pre-install: sync clang/kernel/*.c -> ext/kernel/"
+if [ -d "${CLANG_DIR}/kernel" ]; then
+    mkdir -p "${EXT_DIR}/kernel"
+    kernel_overlay=("${CLANG_DIR}/kernel/"*.c)
+    [ "${#kernel_overlay[@]}" -gt 0 ] || die "No kernel overlay files found in ${CLANG_DIR}/kernel/"
+    cp -f "${kernel_overlay[@]}" "${EXT_DIR}/kernel/"
+fi
+
 echo "pre-install: complete"

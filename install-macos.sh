@@ -131,6 +131,15 @@ if ! bash "${SCRIPT_DIR}/pre-install.sh" >>"$LOG_FILE" 2>&1; then
     die "pre-install.sh failed. See ${LOG_FILE}."
 fi
 ok "pre-install complete"
+
+for required_file in \
+    "${SCRIPT_DIR}/ext/kernel/file.c" \
+    "${SCRIPT_DIR}/ext/kernel/require.c" \
+    "${SCRIPT_DIR}/ext/kernel/main.c"
+do
+    [ -f "$required_file" ] || die "Missing required kernel overlay file: ${required_file}"
+done
+ok "clang kernel overlays are present in ext/kernel/"
 echo ""
 
 step "📄 zephir stubs..."
