@@ -4,9 +4,10 @@
     "extension-name": "posi",
     "description": "A Truly PHP-Controllable POSIX Extension",
     "author": "Project Saturn Studios, LLC",
-    "version": "0.4.5",
+    "version": "0.4.6",
     "extra-sources": [
-        "src/system-api.c"
+        "src/system-api.c",
+        "src/termios-api.c"
     ],
     "optimizer-dirs": [
         "optimizers"

@@ -116,7 +116,6 @@ class System
         return lseek_file(fd, offset, whence);
     }
 
-    // public static function lstat()
     // public static function mkdir()
     // public static function mkfifo()
     // public static function mknod()
@@ -145,7 +144,10 @@ class System
 
     // public static function pathconf()
     // public static function pipe()
-    // public static function poll()
+    public static function ppoll(int fd, int timeout_ns, int events = 0) -> int
+    {
+        return ppoll_file(fd, timeout_ns, events);
+    }
     // public static function posix_spawn()
     // public static function posix_spawnp()
     public static function read(int fd, int bytes_to_read) -> var
@@ -231,6 +233,15 @@ class System
         var result;
 
         let result = hostname_sys();
+
+        return result;
+    }
+
+    public static function lstat(string path) -> var
+    {
+        var result;
+
+        let result = lstat_path(path);
 
         return result;
     }
