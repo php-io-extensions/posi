@@ -3,7 +3,7 @@
     "type": "php-ext",
     "description": "PHP-Controllable UNIX POSIX Extension",
     "license": "MIT",
-    "version": "0.4.8",
+    "version": "0.4.10",
     "authors": [
         {
             "name": "Project Saturn Studios, LLC",
