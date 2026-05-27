@@ -283,6 +283,31 @@ PHP_METHOD(Posi_System, open)
 	RETURN_MM_LONG(result);
 }
 
+PHP_METHOD(Posi_System, ppoll)
+{
+	zval *fd_param = NULL, *timeout_ns_param = NULL, *events_param = NULL, _0, _1, _2;
+	zend_long fd, timeout_ns, events;
+
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
+	ZEND_PARSE_PARAMETERS_START(2, 3)
+		Z_PARAM_LONG(fd)
+		Z_PARAM_LONG(timeout_ns)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(events)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(2, 1, &fd_param, &timeout_ns_param, &events_param);
+	if (!events_param) {
+		events = 0;
+	} else {
+		}
+	ZVAL_LONG(&_0, fd);
+	ZVAL_LONG(&_1, timeout_ns);
+	ZVAL_LONG(&_2, events);
+	RETURN_LONG(posix_ppoll(&_0, &_1, &_2));
+}
+
 PHP_METHOD(Posi_System, read)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
@@ -421,6 +446,26 @@ PHP_METHOD(Posi_System, hostname)
 
 	ZEPHIR_INIT_VAR(&result);
 	posix_hostname(&result);
+	RETURN_CCTOR(&result);
+}
+
+PHP_METHOD(Posi_System, lstat)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *path_param = NULL, result;
+	zval path;
+
+	ZVAL_UNDEF(&path);
+	ZVAL_UNDEF(&result);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(path)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &path_param);
+	zephir_get_strval(&path, path_param);
+	ZEPHIR_INIT_VAR(&result);
+	posix_lstat(&result, &path);
 	RETURN_CCTOR(&result);
 }
 

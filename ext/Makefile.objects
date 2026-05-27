@@ -1,0 +1,84 @@
+-include posi.dep
+posi.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/posi.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/posi.c -o posi.lo  -MMD -MF posi.dep -MT posi.lo
+-include kernel/main.dep
+kernel/main.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/main.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/main.c -o kernel/main.lo  -MMD -MF kernel/main.dep -MT kernel/main.lo
+-include kernel/memory.dep
+kernel/memory.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/memory.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/memory.c -o kernel/memory.lo  -MMD -MF kernel/memory.dep -MT kernel/memory.lo
+-include kernel/exception.dep
+kernel/exception.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/exception.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/exception.c -o kernel/exception.lo  -MMD -MF kernel/exception.dep -MT kernel/exception.lo
+-include kernel/debug.dep
+kernel/debug.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/debug.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/debug.c -o kernel/debug.lo  -MMD -MF kernel/debug.dep -MT kernel/debug.lo
+-include kernel/backtrace.dep
+kernel/backtrace.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/backtrace.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/backtrace.c -o kernel/backtrace.lo  -MMD -MF kernel/backtrace.dep -MT kernel/backtrace.lo
+-include kernel/object.dep
+kernel/object.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/object.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/object.c -o kernel/object.lo  -MMD -MF kernel/object.dep -MT kernel/object.lo
+-include kernel/array.dep
+kernel/array.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/array.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/array.c -o kernel/array.lo  -MMD -MF kernel/array.dep -MT kernel/array.lo
+-include kernel/string.dep
+kernel/string.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/string.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/string.c -o kernel/string.lo  -MMD -MF kernel/string.dep -MT kernel/string.lo
+-include kernel/fcall.dep
+kernel/fcall.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/fcall.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/fcall.c -o kernel/fcall.lo  -MMD -MF kernel/fcall.dep -MT kernel/fcall.lo
+-include kernel/require.dep
+kernel/require.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/require.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/require.c -o kernel/require.lo  -MMD -MF kernel/require.dep -MT kernel/require.lo
+-include kernel/file.dep
+kernel/file.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/file.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/file.c -o kernel/file.lo  -MMD -MF kernel/file.dep -MT kernel/file.lo
+-include kernel/operators.dep
+kernel/operators.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/operators.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/operators.c -o kernel/operators.lo  -MMD -MF kernel/operators.dep -MT kernel/operators.lo
+-include kernel/math.dep
+kernel/math.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/math.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/math.c -o kernel/math.lo  -MMD -MF kernel/math.dep -MT kernel/math.lo
+-include kernel/concat.dep
+kernel/concat.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/concat.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/concat.c -o kernel/concat.lo  -MMD -MF kernel/concat.dep -MT kernel/concat.lo
+-include kernel/variables.dep
+kernel/variables.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/variables.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/variables.c -o kernel/variables.lo  -MMD -MF kernel/variables.dep -MT kernel/variables.lo
+-include kernel/filter.dep
+kernel/filter.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/filter.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/filter.c -o kernel/filter.lo  -MMD -MF kernel/filter.dep -MT kernel/filter.lo
+-include kernel/iterator.dep
+kernel/iterator.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/iterator.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/iterator.c -o kernel/iterator.lo  -MMD -MF kernel/iterator.dep -MT kernel/iterator.lo
+-include kernel/time.dep
+kernel/time.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/time.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/time.c -o kernel/time.lo  -MMD -MF kernel/time.dep -MT kernel/time.lo
+-include kernel/exit.dep
+kernel/exit.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/exit.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/kernel/exit.c -o kernel/exit.lo  -MMD -MF kernel/exit.dep -MT kernel/exit.lo
+-include posi/memory.dep
+posi/memory.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/posi/memory.zep.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/posi/memory.zep.c -o posi/memory.lo  -MMD -MF posi/memory.dep -MT posi/memory.lo
+-include posi/system.dep
+posi/system.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/posi/system.zep.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/posi/system.zep.c -o posi/system.lo  -MMD -MF posi/system.dep -MT posi/system.lo
+-include posi/termios.dep
+posi/termios.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/posi/termios.zep.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/posi/termios.zep.c -o posi/termios.lo  -MMD -MF posi/termios.dep -MT posi/termios.lo
+-include src/system-api.dep
+src/system-api.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/src/system-api.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/src/system-api.c -o src/system-api.lo  -MMD -MF src/system-api.dep -MT src/system-api.lo
+-include src/termios-api.dep
+src/termios-api.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/src/termios-api.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/src/termios-api.c -o src/termios-api.lo  -MMD -MF src/termios-api.dep -MT src/termios-api.lo
+-include src/memory-api.dep
+src/memory-api.lo: /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/src/memory-api.c
+	$(LIBTOOL) --tag=CC --mode=compile $(CC) -I. -I/Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)   -DZEND_COMPILE_DL_EXT=1 -c /Users/angelgonzalez/Development/Zephir/php-io-extensions/v0.4.0/posi/ext/src/memory-api.c -o src/memory-api.lo  -MMD -MF src/memory-api.dep -MT src/memory-api.lo
+$(phplibdir)/posi.la: ./posi.la
+	$(LIBTOOL) --tag=CC --mode=install cp ./posi.la $(phplibdir)
+
+./posi.la: $(shared_objects_posi) $(POSI_SHARED_DEPENDENCIES)
+	$(LIBTOOL) --tag=CC --mode=link $(CC) -shared $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS)  -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_posi) $(POSI_SHARED_LIBADD)
+

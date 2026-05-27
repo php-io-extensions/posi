@@ -11,7 +11,7 @@
 #include "kernel/globals.h"
 
 #define PHP_POSI_NAME        "posi"
-#define PHP_POSI_VERSION     "0.4.3"
+#define PHP_POSI_VERSION     "0.4.8"
 #define PHP_POSI_EXTNAME     "posi"
 #define PHP_POSI_AUTHOR      "Project Saturn Studios, LLC"
 #define PHP_POSI_ZEPVERSION  "0.19.0-$Id$"

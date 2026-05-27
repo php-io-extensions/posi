@@ -15,12 +15,14 @@ PHP_METHOD(Posi_System, fcntl);
 PHP_METHOD(Posi_System, ioctl);
 PHP_METHOD(Posi_System, lseek);
 PHP_METHOD(Posi_System, open);
+PHP_METHOD(Posi_System, ppoll);
 PHP_METHOD(Posi_System, read);
 PHP_METHOD(Posi_System, readv);
 PHP_METHOD(Posi_System, recv);
 PHP_METHOD(Posi_System, wait);
 PHP_METHOD(Posi_System, waitpid);
 PHP_METHOD(Posi_System, hostname);
+PHP_METHOD(Posi_System, lstat);
 PHP_METHOD(Posi_System, write);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posi_system_chmod, 0, 2, IS_LONG, 0)
@@ -84,6 +86,12 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posi_system_open, 0, 2, IS_LONG,
 	ZEND_ARG_TYPE_INFO(0, mode, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posi_system_ppoll, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, fd, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, timeout_ns, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, events, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_posi_system_read, 0, 0, 2)
 	ZEND_ARG_TYPE_INFO(0, fd, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, bytes_to_read, IS_LONG, 0)
@@ -113,6 +121,10 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_posi_system_hostname, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_posi_system_lstat, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posi_system_write, 0, 3, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, fd, IS_LONG, 0)
 	ZEND_ARG_INFO(0, data)
@@ -132,12 +144,14 @@ ZEPHIR_INIT_FUNCS(posi_system_method_entry) {
 	PHP_ME(Posi_System, ioctl, arginfo_posi_system_ioctl, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, lseek, arginfo_posi_system_lseek, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, open, arginfo_posi_system_open, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Posi_System, ppoll, arginfo_posi_system_ppoll, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, read, arginfo_posi_system_read, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, readv, arginfo_posi_system_readv, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, recv, arginfo_posi_system_recv, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, wait, arginfo_posi_system_wait, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, waitpid, arginfo_posi_system_waitpid, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 PHP_ME(Posi_System, hostname, arginfo_posi_system_hostname, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Posi_System, lstat, arginfo_posi_system_lstat, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, write, arginfo_posi_system_write, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_FE_END
 };

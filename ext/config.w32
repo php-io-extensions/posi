@@ -9,8 +9,8 @@ if (PHP_POSI != "no") {
     ADD_EXTENSION_DEP("posi", "json");
     AC_DEFINE("ZEPHIR_USE_PHP_JSON", 1, "Whether PHP json extension is present at compile time");
   }
-  ADD_SOURCES(configure_module_dirname + "/src", "system-api.c", "posi");
-  ADD_SOURCES(configure_module_dirname + "/posi", "system.zep.c", "posi");
+  ADD_SOURCES(configure_module_dirname + "/src", "system-api.c termios-api.c memory-api.c", "posi");
+  ADD_SOURCES(configure_module_dirname + "/posi", "memory.zep.c system.zep.c termios.zep.c", "posi");
   ADD_FLAG("CFLAGS_POSI", "/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL");
   ADD_FLAG("CFLAGS", "/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL");
   ADD_FLAG("LDFLAGS", "/LTCG");

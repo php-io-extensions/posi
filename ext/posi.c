@@ -23,7 +23,9 @@
 
 
 
+zend_class_entry *posi_memory_ce;
 zend_class_entry *posi_system_ce;
+zend_class_entry *posi_termios_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(posi)
 
@@ -35,7 +37,9 @@ static PHP_MINIT_FUNCTION(posi)
 {
 	REGISTER_INI_ENTRIES();
 	zephir_module_init();
+	ZEPHIR_INIT(Posi_Memory);
 	ZEPHIR_INIT(Posi_System);
+	ZEPHIR_INIT(Posi_Termios);
 	
 	return SUCCESS;
 }

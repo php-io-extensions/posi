@@ -117,6 +117,16 @@ class System
 
     /**
      * @param int $fd
+     * @param int $timeout_ns
+     * @param int $events
+     * @return int
+     */
+    public static function ppoll(int $fd, int $timeout_ns, int $events = 0): int
+    {
+    }
+
+    /**
+     * @param int $fd
      * @param int $bytes_to_read
      * @return mixed
      */
@@ -165,6 +175,14 @@ class System
      * @return mixed
      */
     public static function hostname(): mixed
+    {
+    }
+
+    /**
+     * @param string $path
+     * @return mixed
+     */
+    public static function lstat(string $path): mixed
     {
     }
 

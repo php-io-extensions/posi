@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <poll.h>
 #include <stdint.h>
 #include <string.h>
 #include <sys/ioctl.h>
@@ -15,6 +16,7 @@
 #include <sys/stat.h>
 #include <sys/uio.h>
 #include <sys/wait.h>
+#include <time.h>
 #include <unistd.h>
 
 #ifndef HOST_NAME_MAX
@@ -224,6 +226,71 @@ zend_long posix_lseek(zval *fd, zval *offset, zval *whence)
     }
 
     return (zend_long) ret;
+}
+
+static int ppoll_file(int fd, int64_t timeout_ns, int events, int *revents)
+{
+    struct pollfd pfd;
+    int ret;
+
+    memset(&pfd, 0, sizeof(pfd));
+    pfd.fd = fd;
+    pfd.events = (short) (events == 0 ? POLLIN : events);
+
+#if defined(__linux__)
+    {
+        struct timespec ts;
+        struct timespec *ts_ptr = NULL;
+
+        if (timeout_ns >= 0) {
+            ts.tv_sec = (time_t) (timeout_ns / 1000000000LL);
+            ts.tv_nsec = (long) (timeout_ns % 1000000000LL);
+            ts_ptr = &ts;
+        }
+
+        ret = ppoll(&pfd, 1, ts_ptr, NULL);
+    }
+#else
+    {
+        int timeout_ms = -1;
+
+        if (timeout_ns >= 0) {
+            int64_t timeout_ms64 = (timeout_ns + 999999LL) / 1000000LL;
+
+            if (timeout_ms64 > INT_MAX) {
+                timeout_ms64 = INT_MAX;
+            }
+            timeout_ms = (int) timeout_ms64;
+        }
+
+        ret = poll(&pfd, 1, timeout_ms);
+    }
+#endif
+
+    if (ret <= 0) {
+        if (revents) {
+            *revents = 0;
+        }
+        return ret;
+    }
+
+    if (revents) {
+        *revents = (int) pfd.revents;
+    }
+
+    return 1;
+}
+
+zend_long posix_ppoll(zval *fd, zval *timeout_ns, zval *events)
+{
+    int revents = 0;
+
+    return (zend_long) ppoll_file(
+        (int) zval_get_long(fd),
+        (int64_t) zval_get_long(timeout_ns),
+        (int) zval_get_long(events),
+        &revents
+    );
 }
 
 void posix_recv(zval *return_value, zval *fd, zval *len, zval *flags)
@@ -579,3 +646,29 @@ void posix_hostname(zval *return_value)
     buf[HOST_NAME_MAX] = '\0';
     ZVAL_STRING(return_value, buf);
 }
+
+void posix_lstat(zval *return_value, zval *path)
+{
+    struct stat st;
+
+    if (lstat(Z_STRVAL_P(path), &st) != 0) {
+        ZVAL_FALSE(return_value);
+        return;
+    }
+
+    array_init(return_value);
+    add_assoc_long(return_value, "dev",     (zend_long) st.st_dev);
+    add_assoc_long(return_value, "ino",     (zend_long) st.st_ino);
+    add_assoc_long(return_value, "mode",    (zend_long) st.st_mode);
+    add_assoc_long(return_value, "nlink",   (zend_long) st.st_nlink);
+    add_assoc_long(return_value, "uid",     (zend_long) st.st_uid);
+    add_assoc_long(return_value, "gid",     (zend_long) st.st_gid);
+    add_assoc_long(return_value, "rdev",    (zend_long) st.st_rdev);
+    add_assoc_long(return_value, "size",    (zend_long) st.st_size);
+    add_assoc_long(return_value, "blksize", (zend_long) st.st_blksize);
+    add_assoc_long(return_value, "blocks",  (zend_long) st.st_blocks);
+    add_assoc_long(return_value, "atime",   (zend_long) st.st_atime);
+    add_assoc_long(return_value, "mtime",   (zend_long) st.st_mtime);
+    add_assoc_long(return_value, "ctime",   (zend_long) st.st_ctime);
+}
+
