@@ -31,6 +31,48 @@ show_failure_logs() {
     fi
 }
 
+reset_ext_build_tree() {
+    local ext_dir="${SCRIPT_DIR}/ext"
+    local item used_sudo=0
+
+    [ -d "$ext_dir" ] || return 0
+
+    for item in \
+        "$ext_dir/build" \
+        "$ext_dir/autom4te.cache" \
+        "$ext_dir/modules" \
+        "$ext_dir/.libs" \
+        "$ext_dir/kernel/.libs" \
+        "$ext_dir/posi/.libs" \
+        "$ext_dir/src/.libs" \
+        "$ext_dir/Makefile" \
+        "$ext_dir/config.status" \
+        "$ext_dir/config.h" \
+        "$ext_dir/configure" \
+        "$ext_dir/libtool" \
+        "$ext_dir/config.cache" \
+        "$ext_dir/run-tests.php"
+    do
+        [ -e "$item" ] || continue
+        if rm -rf "$item" 2>/dev/null; then
+            continue
+        fi
+        [ -n "$SUDO" ] || return 1
+        $SUDO rm -rf "$item" || return 1
+        used_sudo=1
+    done
+
+    if ! find "$ext_dir" \( -name '*.dep' -o -name '*.lo' -o -name '*.la' \) -delete 2>/dev/null; then
+        [ -n "$SUDO" ] || return 1
+        $SUDO find "$ext_dir" \( -name '*.dep' -o -name '*.lo' -o -name '*.la' \) -delete 2>/dev/null || return 1
+        used_sudo=1
+    fi
+
+    if [ "$used_sudo" -eq 1 ] && [ -n "$SUDO" ]; then
+        $SUDO chown -R "$(id -u)":"$(id -g)" "$ext_dir" 2>/dev/null || true
+    fi
+}
+
 echo "=========================================="
 echo " POSIX Extension Installer (macOS)"
 echo "=========================================="
@@ -117,6 +159,13 @@ echo ""
 # ── Zephir ───────────────────────────────────────────────────────────────────
 cd "${SCRIPT_DIR}"
 
+step "🧹 reset ext/ build tree..."
+if ! reset_ext_build_tree; then
+    die "Could not reset ${SCRIPT_DIR}/ext build artifacts (likely root-owned from a prior sudo build). Run: sudo rm -rf ext/build ext/autom4te.cache ext/modules ext/.libs && sudo chown -R \$(id -un):\$(id -gn) ext/"
+fi
+ok "ext/ build tree reset"
+echo ""
+
 step "🧹 zephir fullclean..."
 if ! "$ZEPHIR" fullclean >"$LOG_FILE" 2>&1; then
     show_failure_logs
@@ -153,12 +202,18 @@ echo ""
 # ── Compile ───────────────────────────────────────────────────────────────────
 step "   Compiling..."
 cd "${SCRIPT_DIR}/ext"
-# Remove stale .dep files that may have been committed from another machine.
-# They contain absolute paths baked in at compile time; make regenerates them.
-find . -name "*.dep" -delete 2>/dev/null || true
-phpize >>"$LOG_FILE" 2>&1 || true
-./configure "--with-php-config=${RESOLVED_PHP_CONFIG}" >>"$LOG_FILE" 2>&1 || true
-make -j"$(sysctl -n hw.logicalcpu 2>/dev/null || echo 2)" >>"$LOG_FILE" 2>&1 || true
+if ! phpize >>"$LOG_FILE" 2>&1; then
+    show_failure_logs
+    die "phpize failed. See ${LOG_FILE}."
+fi
+if ! ./configure "--with-php-config=${RESOLVED_PHP_CONFIG}" >>"$LOG_FILE" 2>&1; then
+    show_failure_logs
+    die "configure failed. See ${LOG_FILE}."
+fi
+if ! make -j"$(sysctl -n hw.logicalcpu 2>/dev/null || echo 2)" >>"$LOG_FILE" 2>&1; then
+    show_failure_logs
+    die "make failed. See ${LOG_FILE}."
+fi
 cd "${SCRIPT_DIR}"
 
 if [ ! -f "$BUILD_SO" ]; then

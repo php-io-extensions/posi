@@ -32,6 +32,50 @@ show_failure_logs() {
     fi
 }
 
+# PIE and manual installs can leave root-owned or machine-specific build artifacts
+# in ext/, including Makefiles with absolute paths. Scrub those before building.
+reset_ext_build_tree() {
+    local ext_dir="${SCRIPT_DIR}/ext"
+    local item used_sudo=0
+
+    [ -d "$ext_dir" ] || return 0
+
+    for item in \
+        "$ext_dir/build" \
+        "$ext_dir/autom4te.cache" \
+        "$ext_dir/modules" \
+        "$ext_dir/.libs" \
+        "$ext_dir/kernel/.libs" \
+        "$ext_dir/posi/.libs" \
+        "$ext_dir/src/.libs" \
+        "$ext_dir/Makefile" \
+        "$ext_dir/config.status" \
+        "$ext_dir/config.h" \
+        "$ext_dir/configure" \
+        "$ext_dir/libtool" \
+        "$ext_dir/config.cache" \
+        "$ext_dir/run-tests.php"
+    do
+        [ -e "$item" ] || continue
+        if rm -rf "$item" 2>/dev/null; then
+            continue
+        fi
+        [ -n "$SUDO" ] || return 1
+        $SUDO rm -rf "$item" || return 1
+        used_sudo=1
+    done
+
+    if ! find "$ext_dir" \( -name '*.dep' -o -name '*.lo' -o -name '*.la' \) -delete 2>/dev/null; then
+        [ -n "$SUDO" ] || return 1
+        $SUDO find "$ext_dir" \( -name '*.dep' -o -name '*.lo' -o -name '*.la' \) -delete 2>/dev/null || return 1
+        used_sudo=1
+    fi
+
+    if [ "$used_sudo" -eq 1 ] && [ -n "$SUDO" ]; then
+        $SUDO chown -R "$(id -u)":"$(id -g)" "$ext_dir" 2>/dev/null || true
+    fi
+}
+
 echo "=========================================="
 echo " posi Extension Installer (Debian Trixie / Raspberry Pi OS)"
 echo "=========================================="
@@ -100,6 +144,13 @@ echo ""
 # ── Zephir ───────────────────────────────────────────────────────────────────
 cd "${SCRIPT_DIR}"
 
+step "🧹 reset ext/ build tree..."
+if ! reset_ext_build_tree; then
+    die "Could not reset ${SCRIPT_DIR}/ext build artifacts (likely root-owned from sudo pie install). Run: sudo rm -rf ext/build ext/autom4te.cache ext/modules ext/.libs && sudo chown -R \$(id -un):\$(id -gn) ext/"
+fi
+ok "ext/ build tree reset"
+echo ""
+
 step "🧹 zephir fullclean..."
 if ! "$ZEPHIR" fullclean >"$LOG_FILE" 2>&1; then
     show_failure_logs
@@ -136,7 +187,6 @@ echo ""
 # ── Compile ───────────────────────────────────────────────────────────────────
 step "   Compiling..."
 cd "${SCRIPT_DIR}/ext"
-find . -name "*.dep" -delete 2>/dev/null || true
 if ! phpize >>"$LOG_FILE" 2>&1; then
     show_failure_logs
     die "phpize failed. See ${LOG_FILE}."
