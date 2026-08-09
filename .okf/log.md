@@ -1,0 +1,6 @@
+# Directory Update Log
+
+## 2026-08-09
+* **Initialization**: Created OKF v0.2 knowledge bundle for `php-io-extensions/posi` at package root `.okf/`, grounded in `composer.json` / `config.json` / `ext/php_posi.h` (**0.7.0**), `posi/{system,memory,termios}.zep`, `src/*-api.{c,h}`, `optimizers/`, README, and installers (`install-macos.sh`, `install-debian-trixie.sh`, `pre-install.sh`). Prior release line was **0.5.0**; this documents the 0.7.x reconstitution / version-alignment pass.
+* **Creation**: Orientation (overview, stack segmentation vs `microscrap/posix` + drivers), architecture (stack, C ABI, Zephir optimizers), API (`System`, `Memory`, `Termios`, reserved scaffolds), build/packaging, conventions (sibling patterns, handle ownership, no FFI, constants outside), traps (Windows excluded, do-not-rebuild-in-place, IDE stub lag, platform constants, FD close), playbooks (open/read/close demo; regenerate-ext on a **copy**); package-root `AGENTS.md`; `.gitattributes` `export-ignore` for `.okf/` and `AGENTS.md`.
+* **Note**: All concepts marked `status: draft` pending Angel human verification. Commented signatures in `system.zep` documented as scaffolds only. IDE stubs remain `ide/0.4.8` / `ide/0.4.11` (lag) — not regenerated. PHP require documented as composer `>=8.0` and README `8.3+`. Downstream `microscrap/posix` mentioned only as a composition boundary.
