@@ -3,7 +3,7 @@
     "type": "php-ext",
     "description": "PHP-Controllable UNIX POSIX Extension",
     "license": "MIT",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "authors": [
         {
             "name": "Project Saturn Studios, LLC",
@@ -19,7 +19,9 @@
         "build-path": "ext",
         "support-zts": true,
         "support-nts": true,
-        "os-families-exclude": ["windows"],
+        "os-families-exclude": [
+            "windows"
+        ],
         "configure-options": [
             {
                 "name": "enable-posi",
