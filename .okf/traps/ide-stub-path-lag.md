@@ -1,7 +1,7 @@
 ---
 type: Trap
 title: IDE stub path lag
-description: ide/0.4.8 and ide/0.4.11 lag behind package 0.7.0 — do not regenerate casually
+description: ide/0.4.8 and ide/0.4.11 lag behind package 0.8.0 — do not regenerate casually
 resource: /ide
 tags: [posi, trap, ide, stubs]
 status: draft
@@ -23,13 +23,13 @@ sources:
 
 # Trap
 
-Package version is **0.7.0**, but committed IDE stubs still live under `ide/0.4.8/` and `ide/0.4.11/`.[^ide-048][^ide-0411][^composer]
+Package version is **0.8.0**, but committed IDE stubs still live under `ide/0.4.8/` and `ide/0.4.11/`.[^ide-048][^ide-0411][^composer]
 
 Treat those trees as **lagging autocomplete aids**, not as the source of truth for the public API. Source of truth is `posi/*.zep` + `src/*-api.h` + README.
 
 # Agent rule
 
-- Do **not** regenerate or invent `ide/0.7.0/` stubs as part of routine OKF/docs work unless Angel explicitly asks.
+- Do **not** regenerate or invent `ide/0.8.0/` stubs as part of routine OKF/docs work unless Angel explicitly asks.
 - Do not edit stale stub trees as if they were implementation.
 
 When stubs are eventually refreshed, they should match `config.json` version and the implemented methods only.

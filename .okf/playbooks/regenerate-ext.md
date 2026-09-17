@@ -34,7 +34,7 @@ Before tagging a Packagist/PIE release, or after changing `.zep` / `src/*-api.{c
 
 # Steps
 
-1. Confirm version targets are **0.7.0** (or the release you intend) in `composer.json`, `config.json`, and plan the matching `PHP_POSI_VERSION` string.[^composer][^config][^php-h]
+1. Confirm version targets are **0.8.0** (or the release you intend) in `composer.json`, `config.json`, and plan the matching `PHP_POSI_VERSION` string.[^composer][^config][^php-h]
 
 2. Copy the package:
 

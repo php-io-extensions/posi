@@ -32,8 +32,8 @@ sources:
 |------|--------|
 | Package | `php-io-extensions/posi` |
 | Extension name | `posi` |
-| Version | `0.7.0` |
-| Prior release line | `0.5.0` (this cut is 0.7.x reconstitution / version alignment) |
+| Version | `0.8.0` |
+| Prior release lines | `0.7.0`, `0.5.0` |
 | PHP (composer) | `>= 8.0` |
 | PHP (README) | `8.3+` (document both; README is the stricter consumer guidance) |
 | OS | **Unix** — Linux + macOS; Windows excluded (`os-families-exclude`) |
@@ -41,7 +41,7 @@ sources:
 | Author | Project Saturn Studios, LLC |
 | License | MIT |
 
-Version strings are aligned at **0.7.0** in `composer.json`, `config.json`, and `PHP_POSI_VERSION` in `ext/php_posi.h`.[^composer][^config][^php-h]
+Version strings are aligned at **0.8.0** in `composer.json`, `config.json`, and `PHP_POSI_VERSION` in `ext/php_posi.h`.[^composer][^config][^php-h]
 
 # End capability
 
@@ -66,7 +66,7 @@ Version strings are aligned at **0.7.0** in `composer.json`, `config.json`, and 
 | `Posi\Memory` | `posi/memory.zep` | Native buffer primitives |
 | `Posi\Termios` | `posi/termios.zep` | Terminal attributes |
 
-IDE stubs currently live under `ide/0.4.8/` and `ide/0.4.11/` — they **lag** 0.7.0 (see [IDE stub path lag](/traps/ide-stub-path-lag.md)); do not regenerate stubs as part of routine agent work.
+IDE stubs currently live under `ide/0.4.8/` and `ide/0.4.11/` — they **lag** 0.8.0 (see [IDE stub path lag](/traps/ide-stub-path-lag.md)); do not regenerate stubs as part of routine agent work.
 
 See [Stack segmentation](/orientation/stack-segmentation.md) and [Layered stack](/architecture/stack.md).
 

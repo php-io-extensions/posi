@@ -4,7 +4,7 @@ okf_version: "0.2"
 
 # php-io-extensions/posi
 
-Cross-platform (Linux + macOS) PHP extension: Zephir static classes under flat `Posi\` (`System`, `Memory`, `Termios`) that call a thin C ABI in `src/*-api.{c,h}`, which wraps libc POSIX (`open`, `read`, `ioctl`, `termios`, …). File descriptors and native buffer pointers are PHP `int`s. Windows is excluded. No FFI. Version **0.7.0** (0.7.x reconstitution / version-alignment pass; prior line was 0.5.0).
+Cross-platform (Linux + macOS) PHP extension: Zephir static classes under flat `Posi\` (`System`, `Memory`, `Termios`) that call a thin C ABI in `src/*-api.{c,h}`, which wraps libc POSIX (`open`, `read`, `ioctl`, `termios`, …). File descriptors and native buffer pointers are PHP `int`s. Windows is excluded. No FFI. Version **0.8.0** (0.8 line, paired with ext-ftdi 0.8.0; prior lines 0.7.0, 0.5.0).
 
 **Prefer** concepts with `status: stable` when present; content is currently `draft` pending Angel’s human verification of the OKF docs (implementation facts are grounded in shipped Zephir/`src/`/`ext/`/README).
 
@@ -42,7 +42,7 @@ Cross-platform (Linux + macOS) PHP extension: Zephir static classes under flat `
 
 * [Windows excluded](traps/windows-excluded.md) - PIE `os-families-exclude: windows`
 * [Do not rebuild ext/ in place](traps/do-not-rebuild-in-place.md) - Copy → build → sync → delete copy
-* [IDE stub path lag](traps/ide-stub-path-lag.md) - `ide/0.4.8` / `ide/0.4.11` lag behind 0.7.0
+* [IDE stub path lag](traps/ide-stub-path-lag.md) - `ide/0.4.8` / `ide/0.4.11` lag behind 0.8.0
 * [Constants are platform-specific](traps/constants-platform-specific.md) - `O_*` / `F_*` / ioctl values differ by OS
 * [FD ownership / close](traps/fd-ownership-close.md) - PHP GC does not close descriptors
 
