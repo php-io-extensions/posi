@@ -53,6 +53,15 @@ class System
     }
 
     /**
+     * @param int $fd
+     * @param string $mode
+     * @return mixed
+     */
+    public static function fdopen(int $fd, string $mode): mixed
+    {
+    }
+
+    /**
      * @return int
      */
     public static function getuid(): int

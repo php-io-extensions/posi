@@ -5,6 +5,7 @@
 
 int      posix_open(zval *device_path, zval *flags, zval *mode);
 int      posix_close(zval *fd);
+void     posix_fdopen(zval *return_value, zval *fd, zval *mode);
 void     posix_read(zval *return_value, zval *fd, zval *bytes_to_read);
 zend_long posix_write(zval *fd, zval *data, zval *bytes_to_write);
 int      posix_fcntl(zval *fd, zval *cmd, zval *arg, zval *return_value);

@@ -7,3 +7,7 @@
 
 ## 2026-09-17
 * **Update**: version relabelled **0.8.0** in `config.json`, `PHP_POSI_VERSION` and the concepts that state it (index, overview, packaging-ext, sibling-patterns, regenerate-ext, ide-stub-path-lag). Built from a copy per the playbook; Herd PHP 8.4 reports 0.8.0.
+
+## 2026-09-23
+* **Update**: 0.9.0 line. `composer.json`, `config.json`, `PHP_POSI_VERSION` relabelled; `ext/` regenerated on a copy (Zephir 0.19) and synced; IDE stubs regenerated to `ide/0.9.0/`, `ide/0.4.8` and `ide/0.4.11` removed. Installed into Herd 8.4, Homebrew 8.4 NTS and 8.4 ZTS. No API change.
+* **Playbook**: shipping to Linux — `COPYFILE_DISABLE=1 tar --exclude='._*'`; AppleDouble entries broke `zephir generate` on the Pi (2026-09-23). Pi 5 rebuilt 0.9.0 through the installer after the fix.

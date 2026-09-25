@@ -44,6 +44,15 @@ class System
         return fchown_file(fd, owner, group);
     }
 
+    public static function fdopen(int fd, string mode) -> var
+    {
+        var result;
+
+        let result = fdopen_file(fd, mode);
+
+        return result;
+    }
+
     public static function getuid() -> int
     {
         return getuid_proc();

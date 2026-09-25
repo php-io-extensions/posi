@@ -5,7 +5,7 @@ description: Maintainer Zephir rebuild on a disposable copy — never in-place o
 resource: /install-macos.sh
 tags: [posi, playbook, packaging, zephir]
 status: draft
-generated: { by: okf-documentation-generator/cursor-grok-4.5, at: "2026-08-09T17:48:43Z" }
+generated: { by: openai/gpt-5.6-sol, at: "2026-09-23T23:03:00Z" }
 sources:
   - id: install
     resource: /install-macos.sh
@@ -34,7 +34,7 @@ Before tagging a Packagist/PIE release, or after changing `.zep` / `src/*-api.{c
 
 # Steps
 
-1. Confirm version targets are **0.8.0** (or the release you intend) in `composer.json`, `config.json`, and plan the matching `PHP_POSI_VERSION` string.[^composer][^config][^php-h]
+1. Confirm version targets are **0.9.0** (or the release you intend) in `composer.json`, `config.json`, and plan the matching `PHP_POSI_VERSION` string.[^composer][^config][^php-h]
 
 2. Copy the package:
 
@@ -73,7 +73,15 @@ rm -rf "$COPY"
 # Explicit non-goals for agents
 
 - Do not run zephir / phpize / make / `pie install` in the primary folder to “refresh” C.
-- Do not regenerate IDE stubs unless Angel asks (current stubs lag at `ide/0.4.x`).
+- Regenerate IDE stubs only alongside a version bump.
+
+# Shipping the tree to a Linux host
+
+macOS `tar` writes AppleDouble `._<name>.zep` entries. Zephir on Linux parses them as source and dies with `A namespace is required` (surfaced as a `CompilerException` TypeError on Zephir 0.20). Archive with:
+
+```bash
+COPYFILE_DISABLE=1 tar --exclude=.git --exclude='._*' --exclude=.DS_Store -czf /tmp/PKG.tgz PKG
+```
 
 See [Do not rebuild in place](/traps/do-not-rebuild-in-place.md).
 

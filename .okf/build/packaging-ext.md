@@ -1,11 +1,11 @@
 ---
 type: Convention
 title: Committed ext/ notes
-description: Ship-ready ext/ tree, version header, and stub lag
+description: Ship-ready ext/ tree, version header, and version-aligned stubs
 resource: /ext/php_posi.h
 tags: [posi, build, packaging]
 status: draft
-generated: { by: okf-documentation-generator/cursor-grok-4.5, at: "2026-08-09T17:48:43Z" }
+generated: { by: openai/gpt-5.6-sol, at: "2026-09-23T23:03:00Z" }
 sources:
   - id: php-h
     resource: /ext/php_posi.h
@@ -27,19 +27,19 @@ PIE/`phpize` builds from the pre-generated C tree under `ext/` (`build-path: ext
 
 | Artifact | Role |
 |----------|------|
-| `ext/php_posi.h` | `PHP_POSI_VERSION` (`0.8.0`)[^php-h] |
+| `ext/php_posi.h` | `PHP_POSI_VERSION` (`0.9.0`)[^php-h] |
 | `ext/posi/*.zep.c` | Zephir-generated class C |
 | `ext/src/*-api.{c,h}` | Mirrored C ABI sources |
 | `ext/kernel/` | Zephir kernel |
 | `ext/config.m4` | `--enable-posi` |
 
-# Version alignment (0.8.0)
+# Version alignment (0.9.0)
 
 Keep these in sync for a release: `composer.json` `version`, `config.json` `version`, `PHP_POSI_VERSION` in `ext/php_posi.h`.[^config][^php-h]
 
 # Stubs
 
-On-disk IDE stubs are still `ide/0.4.8/` and `ide/0.4.11/` — they **lag** the 0.8.0 line. Do not regenerate stubs as casual agent work; see [IDE stub path lag](/traps/ide-stub-path-lag.md).
+On-disk IDE stubs live at `ide/0.9.0/`. Regenerate them only alongside a version bump; see [IDE stub path lag](/traps/ide-stub-path-lag.md).
 
 # Do not commit phpize junk
 

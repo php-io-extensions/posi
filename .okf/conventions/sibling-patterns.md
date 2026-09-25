@@ -4,7 +4,7 @@ title: Sibling patterns
 description: Shared php-io-extensions packaging style (and what posi pioneered)
 tags: [posi, convention, packaging]
 status: draft
-generated: { by: okf-documentation-generator/cursor-grok-4.5, at: "2026-08-09T17:48:43Z" }
+generated: { by: openai/gpt-5.6-sol, at: "2026-09-23T23:03:00Z" }
 sources:
   - id: composer
     resource: /composer.json
@@ -25,7 +25,7 @@ sources:
 | Constants outside extension | App / microscrap enums | sdl3 |
 | Windows excluded | `os-families-exclude: ["windows"]` | sdl3 |
 | Zephir `optimizer-dirs` | `optimizers/` | (posi-specific density) |
-| Version line **0.8.0** | Relabel from 0.7.0 | ecosystem 0.8.x |
+| Version line **0.9.0** | Relabel from 0.8.0 | ecosystem 0.9.x |
 
 # Not shared
 

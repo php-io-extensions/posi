@@ -150,6 +150,30 @@ int posix_close(zval *fd) {
     return close((int) Z_LVAL_P(fd));
 }
 
+/*
+ * fdopen(3) for PHP: a stream over the caller's fd, no dup. The stream owns the fd from here and
+ * fclose() closes it. The fd's own flags, close-on-exec included, are untouched.
+ */
+void posix_fdopen(zval *return_value, zval *fd, zval *mode)
+{
+    int         descriptor = (int) Z_LVAL_P(fd);
+    php_stream *stream;
+
+    if (fcntl(descriptor, F_GETFD) < 0) {
+        ZVAL_FALSE(return_value);
+        return;
+    }
+
+    stream = php_stream_fopen_from_fd(descriptor, Z_STRVAL_P(mode), NULL);
+
+    if (stream == NULL) {
+        ZVAL_FALSE(return_value);
+        return;
+    }
+
+    php_stream_to_zval(stream, return_value);
+}
+
 int posix_open(zval *dp, zval *flags, zval *mode) {
     int fl = (int) Z_LVAL_P(flags);
 

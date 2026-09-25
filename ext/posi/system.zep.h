@@ -8,6 +8,7 @@ PHP_METHOD(Posi_System, chown);
 PHP_METHOD(Posi_System, close);
 PHP_METHOD(Posi_System, fchmod);
 PHP_METHOD(Posi_System, fchown);
+PHP_METHOD(Posi_System, fdopen);
 PHP_METHOD(Posi_System, getuid);
 PHP_METHOD(Posi_System, setuid);
 PHP_METHOD(Posi_System, umask);
@@ -49,6 +50,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posi_system_fchown, 0, 3, IS_LON
 	ZEND_ARG_TYPE_INFO(0, fd, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, owner, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, group, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_posi_system_fdopen, 0, 0, 2)
+	ZEND_ARG_TYPE_INFO(0, fd, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, mode, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posi_system_getuid, 0, 0, IS_LONG, 0)
@@ -137,6 +143,7 @@ ZEPHIR_INIT_FUNCS(posi_system_method_entry) {
 	PHP_ME(Posi_System, close, arginfo_posi_system_close, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, fchmod, arginfo_posi_system_fchmod, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, fchown, arginfo_posi_system_fchown, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Posi_System, fdopen, arginfo_posi_system_fdopen, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, getuid, arginfo_posi_system_getuid, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, setuid, arginfo_posi_system_setuid, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Posi_System, umask, arginfo_posi_system_umask, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
