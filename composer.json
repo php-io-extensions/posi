@@ -1,0 +1,46 @@
+{
+    "name": "php-io-extensions/posi",
+    "type": "php-ext",
+    "description": "PHP bindings of POSIX descriptors, paths, processes and termios, with native buffers for ioctl() structs",
+    "license": "MIT",
+    "version": "0.10.0",
+    "authors": [
+        {
+            "name": "Project Saturn Studios, LLC",
+            "email": "info@projectsaturnstudios.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.4",
+        "ext-posix": "*"
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.10.x-dev"
+        }
+    },
+    "php-ext": {
+        "extension-name": "posi",
+        "priority": 30,
+        "support-zts": true,
+        "support-nts": true,
+        "os-families-exclude": [
+            "windows"
+        ],
+        "configure-options": [
+            {
+                "name": "enable-posi",
+                "description": "Enable the posi extension",
+                "needs-value": false
+            }
+        ]
+    }
+}
