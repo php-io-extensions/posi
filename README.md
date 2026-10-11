@@ -1,5 +1,6 @@
 # ext-posi
 
+[![CI](https://img.shields.io/github/actions/workflow/status/php-io-extensions/posi/ci.yml?style=flat-square&label=CI)](https://github.com/php-io-extensions/posi/actions/workflows/ci.yml)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/php-io-extensions/posi.svg)](https://packagist.org/packages/php-io-extensions/posi)
 [![License](https://img.shields.io/packagist/l/php-io-extensions/posi.svg)](LICENSE)
 
