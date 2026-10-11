@@ -23,7 +23,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: none
+          tools: composer
         env:
           phpts: ${{ matrix.ts == 'zts' && 'ts' || 'nts' }}
 
@@ -39,3 +39,8 @@ jobs:
           POSIX=""; php -n -m | grep -qx posix || POSIX="-d extension=posix"
           php -n $POSIX -d extension="$PWD/modules/posi.so" -r 'exit(extension_loaded("posi") ? 0 : 1);'
           php -n $POSIX -d extension="$PWD/modules/posi.so" --ri posi
+
+      - name: Test
+        run: |
+          composer install --no-interaction --no-progress
+          php -d extension="$PWD/modules/posi.so" -d memory_limit=128M vendor/bin/pest --ci
