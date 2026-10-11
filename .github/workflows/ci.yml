@@ -34,6 +34,8 @@ jobs:
           make -j"$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
 
       - name: Load
+        # posi requires ext-posix; -n drops the ini that enables it where PHP ships it as a shared extension.
         run: |
-          php -n -d extension="$PWD/modules/posi.so" -r 'exit(extension_loaded("posi") ? 0 : 1);'
-          php -n -d extension="$PWD/modules/posi.so" --ri posi
+          POSIX=""; php -n -m | grep -qx posix || POSIX="-d extension=posix"
+          php -n $POSIX -d extension="$PWD/modules/posi.so" -r 'exit(extension_loaded("posi") ? 0 : 1);'
+          php -n $POSIX -d extension="$PWD/modules/posi.so" --ri posi
