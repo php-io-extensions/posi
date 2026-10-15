@@ -7,7 +7,7 @@
 extern zend_module_entry posi_module_entry;
 #define phpext_posi_ptr &posi_module_entry
 
-#define PHP_POSI_VERSION "0.10.5"
+#define PHP_POSI_VERSION "0.10.6"
 
 ZEND_BEGIN_MODULE_GLOBALS(posi)
 	int last_errno;

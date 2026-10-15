@@ -3,7 +3,7 @@
     "type": "php-ext",
     "description": "PHP bindings of POSIX descriptors, paths, processes and termios, with native buffers for ioctl() structs",
     "license": "MIT",
-    "version": "0.10.5",
+    "version": "0.10.6",
     "authors": [
         {
             "name": "Project Saturn Studios, LLC",

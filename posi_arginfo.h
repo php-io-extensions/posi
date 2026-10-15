@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 8f4e2e3ab063bbbb1c88051f90904f1231513410 */
+ * Stub hash: 9a83dc46350cb554d5ff8f7b3f4bd6fb21c8b961 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posix_open, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, device_path, IS_STRING, 0)
@@ -62,6 +62,16 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_posix_fdopen, 0, 0, 2)
 	ZEND_ARG_TYPE_INFO(0, fd, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, mode, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_posix_fileno, 0, 1, MAY_BE_LONG|MAY_BE_FALSE)
+	ZEND_ARG_INFO(0, stream)
+ZEND_END_ARG_INFO()
+
+#define arginfo_posix_dup arginfo_posix_close
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_posix_socket_fdopen, 0, 0, 1)
+	ZEND_ARG_TYPE_INFO(0, fd, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posix_chmod, 0, 2, IS_LONG, 0)
@@ -203,6 +213,9 @@ ZEND_FUNCTION(fcntl);
 ZEND_FUNCTION(ioctl);
 ZEND_FUNCTION(posix_ppoll);
 ZEND_FUNCTION(posix_fdopen);
+ZEND_FUNCTION(posix_fileno);
+ZEND_FUNCTION(posix_dup);
+ZEND_FUNCTION(posix_socket_fdopen);
 ZEND_FUNCTION(posix_chmod);
 ZEND_FUNCTION(posix_chown);
 ZEND_FUNCTION(posix_fchmod);
@@ -249,6 +262,9 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(ioctl, arginfo_ioctl)
 	ZEND_FE(posix_ppoll, arginfo_posix_ppoll)
 	ZEND_FE(posix_fdopen, arginfo_posix_fdopen)
+	ZEND_FE(posix_fileno, arginfo_posix_fileno)
+	ZEND_FE(posix_dup, arginfo_posix_dup)
+	ZEND_FE(posix_socket_fdopen, arginfo_posix_socket_fdopen)
 	ZEND_FE(posix_chmod, arginfo_posix_chmod)
 	ZEND_FE(posix_chown, arginfo_posix_chown)
 	ZEND_FE(posix_fchmod, arginfo_posix_fchmod)

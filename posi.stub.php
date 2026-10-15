@@ -30,6 +30,14 @@ function posix_ppoll(int $fd, int $timeout_ns = 0, int $events = 0): int {}
 /** @return resource|false */
 function posix_fdopen(int $fd, string $mode) {}
 
+/** @param resource $stream */
+function posix_fileno($stream): int|false {}
+
+function posix_dup(int $fd): int {}
+
+/** @return resource|false */
+function posix_socket_fdopen(int $fd) {}
+
 function posix_chmod(string $path, int $mode): int {}
 
 function posix_chown(string $path, int $owner, int $group): int {}

@@ -1,5 +1,9 @@
 # Log
 
+## 2026-10-14
+
+* **Socket descriptors**: `posix_fileno`, `posix_dup`, `posix_socket_fdopen` added for sharing one listening socket across ext-parallel threads ([descriptors](/api/descriptors.md)). Suite 67 passed on zhp and the Pi (66 + 1 skipped on php84, which has no ext-parallel), TLS handshake and four-thread accept included. `PHP_POSI_VERSION` and the composer.json `version` move to 0.10.6.
+
 ## 2026-10-11
 
 * **README rewritten** for 0.10.5 to the php-io-extensions template: centered header with badges, problem/solution intro, two-part Basic usage sketch (ioctl on i2c-dev, with a serial-port example), per-function API in the 0.4.0 style with every hardware-free example run on php84, zhp and the Pi, requirements table, both installers, test-suite run proven from a fresh clone on php84, zhp and the Pi (55 passed, 173 assertions). No code change; `PHP_POSI_VERSION` and the composer.json `version` move to 0.10.5. Concepts untouched.

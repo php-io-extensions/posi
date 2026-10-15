@@ -14,8 +14,10 @@
 #endif
 
 #include "php.h"
+#include "ext/standard/file.h"
 #include "ext/standard/info.h"
 #include "php_posi.h"
+#include "php_network.h"
 
 #include <fcntl.h>
 #include <poll.h>
@@ -603,6 +605,119 @@ ZEND_FUNCTION(posix_fdopen)
 	if (stream == NULL) {
 		RETURN_FALSE;
 	}
+	php_stream_to_zval(stream, return_value);
+}
+
+/* fileno(3) for a PHP stream: the socket or file descriptor it wraps, no dup. EBADF when it wraps none. */
+ZEND_FUNCTION(posix_fileno)
+{
+	zval *zstream;
+	php_stream *stream;
+	php_socket_t sock;
+	int fd;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_RESOURCE(zstream)
+	ZEND_PARSE_PARAMETERS_END();
+
+	php_stream_from_zval(stream, zstream);
+
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_SOCKETD) == SUCCESS
+		&& php_stream_cast(stream, PHP_STREAM_AS_SOCKETD, (void **) &sock, 0) == SUCCESS) {
+		RETURN_LONG((zend_long) sock);
+	}
+
+	if (php_stream_can_cast(stream, PHP_STREAM_AS_FD) == SUCCESS
+		&& php_stream_cast(stream, PHP_STREAM_AS_FD, (void **) &fd, 0) == SUCCESS) {
+		RETURN_LONG(fd);
+	}
+
+	POSI_G(last_errno) = EBADF;
+	RETURN_FALSE;
+}
+
+/* dup(2): a new descriptor for the same open file description. */
+ZEND_FUNCTION(posix_dup)
+{
+	zend_long fd_l;
+	int fd, copy;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(fd_l)
+	ZEND_PARSE_PARAMETERS_END();
+
+	POSI_ARG_INT(fd, fd_l, 1);
+
+	copy = dup(fd);
+	if (copy < 0) {
+		POSI_RECORD_ERRNO();
+	}
+	RETURN_LONG(copy);
+}
+
+/* fdopen(3) for a stream socket: a stream over the caller's socket fd, no dup. The stream comes from
+ * the registered "tcp" transport, so it carries that transport's ops (ext/openssl's TLS-capable ones
+ * when loaded): stream_socket_accept(), stream_socket_get_name() and stream_socket_enable_crypto()
+ * work on it and on what it accepts. php_stream_sock_open_from_socket() can't stand in: its
+ * generic_socket ops neither accept nor encrypt. fclose() closes the fd. */
+ZEND_FUNCTION(posix_socket_fdopen)
+{
+	zend_long fd_l;
+	int fd, type, fl;
+	socklen_t type_len = sizeof(type);
+	struct stat st;
+	php_stream_transport_factory factory;
+	php_stream *stream;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(fd_l)
+	ZEND_PARSE_PARAMETERS_END();
+
+	POSI_ARG_INT(fd, fd_l, 1);
+
+	if (fstat(fd, &st) < 0) {
+		POSI_RECORD_ERRNO();
+		RETURN_FALSE;
+	}
+	if (!S_ISSOCK(st.st_mode)) {
+		POSI_G(last_errno) = ENOTSOCK;
+		RETURN_FALSE;
+	}
+	if (getsockopt(fd, SOL_SOCKET, SO_TYPE, &type, &type_len) < 0) {
+		POSI_RECORD_ERRNO();
+		RETURN_FALSE;
+	}
+	if (type != SOCK_STREAM) {
+		POSI_G(last_errno) = EPROTOTYPE;
+		RETURN_FALSE;
+	}
+	fl = fcntl(fd, F_GETFL);
+	if (fl < 0) {
+		POSI_RECORD_ERRNO();
+		RETURN_FALSE;
+	}
+
+	factory = zend_hash_str_find_ptr(php_stream_xport_get_hash(), "tcp", sizeof("tcp") - 1);
+	if (factory == NULL) {
+		POSI_G(last_errno) = EPROTONOSUPPORT;
+		RETURN_FALSE;
+	}
+
+	/* ext/openssl's factory copies *timeout into its connect timeout, so it can't be NULL. */
+	struct timeval timeout = { .tv_sec = (time_t) FG(default_socket_timeout), .tv_usec = 0 };
+
+	stream = factory("tcp", sizeof("tcp") - 1, "", 0, NULL, 0, 0, &timeout, NULL STREAMS_CC);
+	if (stream == NULL) {
+		POSI_G(last_errno) = ENOMEM;
+		RETURN_FALSE;
+	}
+
+	/* Both core tcp and ext/openssl abstracts begin with php_netstream_data_t. */
+	php_netstream_data_t *sock = (php_netstream_data_t *) stream->abstract;
+	sock->socket = fd;
+	sock->is_blocked = (fl & O_NONBLOCK) == 0;
+	stream->flags |= PHP_STREAM_FLAG_AVOID_BLOCKING;
+
 	php_stream_to_zval(stream, return_value);
 }
 

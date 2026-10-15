@@ -23,6 +23,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          # SocketTest forks a TLS client (pcntl) and signs a throwaway cert (openssl).
+          extensions: openssl, pcntl
           tools: composer
         env:
           phpts: ${{ matrix.ts == 'zts' && 'ts' || 'nts' }}
