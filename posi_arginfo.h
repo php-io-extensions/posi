@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 9a83dc46350cb554d5ff8f7b3f4bd6fb21c8b961 */
+ * Stub hash: 899f4fb1fc23a51f4646fbbd5eb2c7f5fcdfdd21 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posix_open, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, device_path, IS_STRING, 0)
@@ -72,6 +72,11 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_posix_socket_fdopen, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, fd, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posix_listen, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, fd, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, backlog, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posix_chmod, 0, 2, IS_LONG, 0)
@@ -216,6 +221,7 @@ ZEND_FUNCTION(posix_fdopen);
 ZEND_FUNCTION(posix_fileno);
 ZEND_FUNCTION(posix_dup);
 ZEND_FUNCTION(posix_socket_fdopen);
+ZEND_FUNCTION(posix_listen);
 ZEND_FUNCTION(posix_chmod);
 ZEND_FUNCTION(posix_chown);
 ZEND_FUNCTION(posix_fchmod);
@@ -265,6 +271,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(posix_fileno, arginfo_posix_fileno)
 	ZEND_FE(posix_dup, arginfo_posix_dup)
 	ZEND_FE(posix_socket_fdopen, arginfo_posix_socket_fdopen)
+	ZEND_FE(posix_listen, arginfo_posix_listen)
 	ZEND_FE(posix_chmod, arginfo_posix_chmod)
 	ZEND_FE(posix_chown, arginfo_posix_chown)
 	ZEND_FE(posix_fchmod, arginfo_posix_fchmod)

@@ -170,3 +170,65 @@ it('shares one listener across parallel threads, each accepting on its own copy'
     expect(array_sum($counts))->toBe(400)
         ->and(min($counts))->toBeGreaterThan(0);
 })->skip(! extension_loaded('parallel'), 'needs a ZTS PHP with ext-parallel');
+
+/** @return array{0: resource, 1: string} a Unix stream socket bound to a scratch path but not listening, and its address */
+function boundSocket(string $name): array
+{
+    $address = 'unix://' . scratchPath($name);
+    $server = stream_socket_server($address, $errno, $error, STREAM_SERVER_BIND);
+
+    if ($server === false) {
+        throw new RuntimeException("bind failed: {$error}");
+    }
+
+    return [$server, $address];
+}
+
+it('turns a bound socket into a listener that accepts connections', function () {
+    [$server, $address] = boundSocket('listen.sock');
+
+    // A bound Unix socket refuses connections until listen(2); the connect warning is the expected refusal.
+    set_error_handler(static fn (): bool => true);
+    $beforeListen = stream_socket_client($address, $errno, $error, 1);
+    restore_error_handler();
+
+    $listened = posix_listen(posix_fileno($server), SOMAXCONN);
+    $client = stream_socket_client($address);
+    $accepted = stream_socket_accept($server, 1);
+    fwrite($client, 'pong');
+
+    expect($beforeListen)->toBeFalse()
+        ->and($errno)->toBe(ECONNREFUSED)
+        ->and($listened)->toBe(0)
+        ->and($accepted)->toBeResource()
+        ->and(fread($accepted, 4))->toBe('pong');
+});
+
+it('fails to listen on a descriptor that is not a socket with ENOTSOCK', function () {
+    $fd = track(posix_open(scratchPath('not-a-socket'), O_RDWR | O_CREAT, 0600));
+
+    expect(posix_listen($fd, SOMAXCONN))->toBe(-1)
+        ->and(posi_errno())->toBe(ENOTSOCK);
+});
+
+it('fails to listen on a datagram socket with EOPNOTSUPP', function () {
+    $udp = stream_socket_server('udp://127.0.0.1:0', $errno, $error, STREAM_SERVER_BIND);
+
+    expect(posix_listen(posix_fileno($udp), SOMAXCONN))->toBe(-1)
+        ->and(posi_errno())->toBe(EOPNOTSUPP);
+});
+
+it('fails to listen on a closed descriptor with EBADF', function () {
+    $fd = posix_open(scratchPath('listen-gone'), O_RDWR | O_CREAT, 0600);
+    posix_close($fd);
+
+    expect(posix_listen($fd, SOMAXCONN))->toBe(-1)
+        ->and(posi_errno())->toBe(EBADF);
+});
+
+it('refuses a listen descriptor or backlog outside the int range instead of truncating it', function () {
+    [$server] = boundSocket('listen-range.sock');
+
+    expect(fn () => posix_listen(PHP_INT_MAX, SOMAXCONN))->toThrow(ValueError::class)
+        ->and(fn () => posix_listen(posix_fileno($server), PHP_INT_MAX))->toThrow(ValueError::class);
+});

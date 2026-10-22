@@ -655,6 +655,26 @@ ZEND_FUNCTION(posix_dup)
 	RETURN_LONG(copy);
 }
 
+ZEND_FUNCTION(posix_listen)
+{
+	zend_long fd_l, backlog_l;
+	int fd, backlog;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(fd_l)
+		Z_PARAM_LONG(backlog_l)
+	ZEND_PARSE_PARAMETERS_END();
+
+	POSI_ARG_INT(fd, fd_l, 1);
+	POSI_ARG_INT(backlog, backlog_l, 2);
+
+	int ret = listen(fd, backlog);
+	if (ret < 0) {
+		POSI_RECORD_ERRNO();
+	}
+	RETURN_LONG(ret);
+}
+
 /* fdopen(3) for a stream socket: a stream over the caller's socket fd, no dup. The stream comes from
  * the registered "tcp" transport, so it carries that transport's ops (ext/openssl's TLS-capable ones
  * when loaded): stream_socket_accept(), stream_socket_get_name() and stream_socket_enable_crypto()
@@ -1090,6 +1110,7 @@ PHP_MINIT_FUNCTION(posi)
 	POSI_REGISTER_IF_ABSENT(MSG_OOB);
 	POSI_REGISTER_IF_ABSENT(MSG_PEEK);
 	POSI_REGISTER_IF_ABSENT(MSG_WAITALL);
+	POSI_REGISTER_IF_ABSENT(SOMAXCONN);
 	POSI_REGISTER_IF_ABSENT(WNOHANG);
 	POSI_REGISTER_IF_ABSENT(WUNTRACED);
 #ifdef WCONTINUED

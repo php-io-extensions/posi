@@ -38,6 +38,8 @@ function posix_dup(int $fd): int {}
 /** @return resource|false */
 function posix_socket_fdopen(int $fd) {}
 
+function posix_listen(int $fd, int $backlog): int {}
+
 function posix_chmod(string $path, int $mode): int {}
 
 function posix_chown(string $path, int $owner, int $group): int {}

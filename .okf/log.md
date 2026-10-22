@@ -1,5 +1,9 @@
 # Log
 
+## 2026-10-20
+
+* **listen**: `posix_listen` added, `listen(2)` 1:1, with `SOMAXCONN` registered if absent ([descriptors](/api/descriptors.md), [constants](/api/constants.md)). SocketTest 16 passed + 1 skipped on php84, zhp and the Pi. Ships in 0.10.6, still untagged.
+
 ## 2026-10-14
 
 * **Socket descriptors**: `posix_fileno`, `posix_dup`, `posix_socket_fdopen` added for sharing one listening socket across ext-parallel threads ([descriptors](/api/descriptors.md)). Suite 67 passed on zhp and the Pi (66 + 1 skipped on php84, which has no ext-parallel), TLS handshake and four-thread accept included. `PHP_POSI_VERSION` and the composer.json `version` move to 0.10.6.

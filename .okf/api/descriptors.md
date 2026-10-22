@@ -1,11 +1,11 @@
 ---
 type: API
 title: Descriptors and paths
-description: open/read/write family, readv, recv, fcntl, ioctl argument modes, ppoll, fdopen, fileno, dup, socket fdopen, chmod family, lstat, hostname.
+description: open/read/write family, readv, recv, fcntl, ioctl argument modes, ppoll, fdopen, fileno, dup, socket fdopen, listen, chmod family, lstat, hostname.
 resource: posi.c
 tags: [posi, fd, ioctl, fcntl]
 status: draft
-generated: { by: claude-opus/5.5, at: 2026-10-15T00:04:15Z }
+generated: { by: claude-opus/5.5, at: 2026-10-20T00:00:00Z }
 sources:
   - id: stub
     resource: posi.stub.php
@@ -33,6 +33,7 @@ Names are `microscrap/posix`'s. Signatures in `posi.stub.php`.[^stub]
 | `posix_fileno($stream)` | `php_stream_cast` (`AS_SOCKETD`, then `AS_FD`) | fd | false, errno `EBADF` |
 | `posix_dup($fd)` | `dup` | new fd | -1 |
 | `posix_socket_fdopen($fd)` | registered `tcp` transport factory, fd installed | socket stream | false: `EBADF` closed, `ENOTSOCK` not a socket, `EPROTOTYPE` not `SOCK_STREAM` |
+| `posix_listen($fd, $backlog)` | `listen` | 0 | -1: `ENOTSOCK` not a socket, `EOPNOTSUPP` datagram |
 | `posix_chmod/fchmod/chown/fchown` | same | 0 | -1 |
 | `posix_umask($mask)` | `umask` | previous mask | — |
 | `posix_lstat($path)` | `lstat` | stat array | false |

@@ -5,7 +5,7 @@ description: Header-valued constants, #ifdef guards, register-if-absent for name
 resource: posi.stub.php
 tags: [posi, constants, portability]
 status: draft
-generated: { by: claude-opus/5.5, at: 2026-10-04T14:15:50Z }
+generated: { by: claude-opus/5.5, at: 2026-10-20T00:00:00Z }
 sources:
   - id: stub
     resource: posi.stub.php
@@ -41,7 +41,7 @@ Values differ per platform: `O_NONBLOCK` 4 macOS vs 0x800 Linux; `O_DIRECT` 0x40
 
 | Names | Why not in stub |
 |---|---|
-| `MSG_OOB`, `MSG_PEEK`, `MSG_WAITALL` | ext/sockets registers them |
+| `MSG_OOB`, `MSG_PEEK`, `MSG_WAITALL`, `SOMAXCONN` | ext/sockets registers them |
 | `WNOHANG`, `WUNTRACED`, `WCONTINUED` | ext/pcntl registers them |
 | POSIX errno set `E2BIG` … `EXDEV` (each `#ifdef`) | ext-kqueue registers some |
 | `ECHO` | PHP keyword; stub cannot declare it. Read with `constant('ECHO')` |
