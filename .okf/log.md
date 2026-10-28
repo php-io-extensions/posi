@@ -1,5 +1,9 @@
 # Log
 
+## 2026-10-28
+
+* **Version**: 0.11.0 in `composer.json` and `PHP_POSI_VERSION` (`php_posi.h`); `branch-alias` `dev-main` is `0.11.x-dev`. Promoted with the Venusian 0.11 ecosystem. No API or behaviour change; built and loaded on Homebrew PHP 8.4 NTS and ZTS.
+
 ## 2026-10-20
 
 * **listen**: `posix_listen` added, `listen(2)` 1:1, with `SOMAXCONN` registered if absent ([descriptors](/api/descriptors.md), [constants](/api/constants.md)). SocketTest 16 passed + 1 skipped on php84, zhp and the Pi. Ships in 0.10.6, still untagged.
