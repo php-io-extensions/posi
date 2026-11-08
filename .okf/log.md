@@ -1,5 +1,13 @@
 # Log
 
+## 2026-11-08
+
+* **Version**: 0.11.1 in `composer.json` and `PHP_POSI_VERSION` (`php_posi.h`); nothing else changed.
+
+* **Aligned memory**: `posix_memalign(?int &$memptr, int $alignment, int $size): int`, `sysconf(int $name): int`, `_SC_PAGESIZE` and `_SC_PAGE_SIZE` (`stdlib.h`, `unistd.h`), so a caller can have memory at a page boundary (a Metal buffer that wraps it without a copy). `posix_memalign` memory is in the same registry as `posi_mem_alloc` ([native buffers](/api/native-buffers.md)): the `posi_mem_*` functions read, write and free it; a second table marks it as the C library's, so it is freed with `free`. Tests: MemoryTest 5 new; the suite from its own repo setup 82 passed, 1 skipped (ZTS); NTS builds and a smoke run passes. No version bump.
+
+* **Shared libraries**: `dlopen`, `dlsym`, `dlclose` and `RTLD_LAZY/NOW/LOCAL/GLOBAL` added, `dlfcn.h` 1:1, with a handle registry ([shared libraries](/api/shared-libraries.md)). `config.m4` checks `dlfcn.h` and links libdl where `dlopen` lives there. SharedLibraryTest 6 passed on Homebrew PHP 8.4 ZTS; NTS builds and loads. No version bump.
+
 ## 2026-10-28
 
 * **Version**: 0.11.0 in `composer.json` and `PHP_POSI_VERSION` (`php_posi.h`); `branch-alias` `dev-main` is `0.11.x-dev`. Promoted with the Venusian 0.11 ecosystem. No API or behaviour change; built and loaded on Homebrew PHP 8.4 NTS and ZTS.

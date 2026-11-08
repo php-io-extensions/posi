@@ -12,6 +12,7 @@ okf_version: "0.2"
 * [Processes](api/processes.md) - posix_wait, posix_waitpid and the sys/wait.h status macros.
 * [Termios](api/termios.md) - The termios array shape, speeds carried in it, BOTHER round trips, posi_set_baud_rate and its hand-declared termios2.
 * [Native buffers](api/native-buffers.md) - posi_mem_alloc/free/read/write, the live-allocation registry, and how addresses reach ioctl() structs.
+* [Shared libraries](api/shared-libraries.md) - dlopen/dlsym/dlclose as ints, the open-handle registry, RTLD_* constants.
 * [Constants](api/constants.md) - Header-valued constants, #ifdef guards, register-if-absent for names other extensions share, and ECHO.
 
 # Runbooks

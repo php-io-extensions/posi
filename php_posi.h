@@ -7,12 +7,16 @@
 extern zend_module_entry posi_module_entry;
 #define phpext_posi_ptr &posi_module_entry
 
-#define PHP_POSI_VERSION "0.11.0"
+#define PHP_POSI_VERSION "0.11.1"
 
 ZEND_BEGIN_MODULE_GLOBALS(posi)
 	int last_errno;
-	/* Live posi_mem_alloc() buffers: address => size in bytes. */
+	/* Live posi_mem_alloc() and posix_memalign() buffers: address => size in bytes. */
 	HashTable allocations;
+	/* The addresses in `allocations` that posix_memalign() made, which free() gives back (the others are Zend's). */
+	HashTable aligned;
+	/* Live dlopen() handles: address => times opened, one dlclose() each. */
+	HashTable dl_handles;
 ZEND_END_MODULE_GLOBALS(posi)
 
 ZEND_EXTERN_MODULE_GLOBALS(posi)

@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 899f4fb1fc23a51f4646fbbd5eb2c7f5fcdfdd21 */
+ * Stub hash: ba222bd425e6acf4137e5ed06f6344f945b61f31 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posix_open, 0, 1, IS_LONG, 0)
 	ZEND_ARG_TYPE_INFO(0, device_path, IS_STRING, 0)
@@ -204,6 +204,30 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posi_mem_read, 0, 2, IS_STRING, 
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, offset, IS_LONG, 0, "0")
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posix_memalign, 0, 3, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(1, memptr, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO(0, alignment, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, size, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_sysconf, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_dlopen, 0, 1, MAY_BE_LONG|MAY_BE_FALSE)
+	ZEND_ARG_TYPE_INFO(0, file, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "RTLD_LAZY")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_dlsym, 0, 2, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, handle, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, symbol, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_dlclose, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, handle, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_posi_errno, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
@@ -254,6 +278,11 @@ ZEND_FUNCTION(posi_mem_alloc);
 ZEND_FUNCTION(posi_mem_free);
 ZEND_FUNCTION(posi_mem_write);
 ZEND_FUNCTION(posi_mem_read);
+ZEND_FUNCTION(posix_memalign);
+ZEND_FUNCTION(sysconf);
+ZEND_FUNCTION(dlopen);
+ZEND_FUNCTION(dlsym);
+ZEND_FUNCTION(dlclose);
 ZEND_FUNCTION(posi_errno);
 
 static const zend_function_entry ext_functions[] = {
@@ -304,12 +333,35 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(posi_mem_free, arginfo_posi_mem_free)
 	ZEND_FE(posi_mem_write, arginfo_posi_mem_write)
 	ZEND_FE(posi_mem_read, arginfo_posi_mem_read)
+	ZEND_FE(posix_memalign, arginfo_posix_memalign)
+	ZEND_FE(sysconf, arginfo_sysconf)
+	ZEND_FE(dlopen, arginfo_dlopen)
+	ZEND_FE(dlsym, arginfo_dlsym)
+	ZEND_FE(dlclose, arginfo_dlclose)
 	ZEND_FE(posi_errno, arginfo_posi_errno)
 	ZEND_FE_END
 };
 
 static void register_posi_symbols(int module_number)
 {
+#if defined(_SC_PAGESIZE)
+	REGISTER_LONG_CONSTANT("_SC_PAGESIZE", _SC_PAGESIZE, CONST_PERSISTENT);
+#endif
+#if defined(_SC_PAGE_SIZE)
+	REGISTER_LONG_CONSTANT("_SC_PAGE_SIZE", _SC_PAGE_SIZE, CONST_PERSISTENT);
+#endif
+#if defined(RTLD_LAZY)
+	REGISTER_LONG_CONSTANT("RTLD_LAZY", RTLD_LAZY, CONST_PERSISTENT);
+#endif
+#if defined(RTLD_NOW)
+	REGISTER_LONG_CONSTANT("RTLD_NOW", RTLD_NOW, CONST_PERSISTENT);
+#endif
+#if defined(RTLD_GLOBAL)
+	REGISTER_LONG_CONSTANT("RTLD_GLOBAL", RTLD_GLOBAL, CONST_PERSISTENT);
+#endif
+#if defined(RTLD_LOCAL)
+	REGISTER_LONG_CONSTANT("RTLD_LOCAL", RTLD_LOCAL, CONST_PERSISTENT);
+#endif
 #if defined(F_DUPFD)
 	REGISTER_LONG_CONSTANT("F_DUPFD", F_DUPFD, CONST_PERSISTENT);
 #endif

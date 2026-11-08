@@ -5,7 +5,7 @@ description: Scope, file layout, module globals, load order, errno and argument 
 resource: posi.c
 tags: [posi, c, zend, zts]
 status: draft
-generated: { by: claude-opus/5.5, at: 2026-10-04T14:15:50Z }
+generated: { by: claude-sonnet/5.5, at: 2026-11-08T12:00:00Z }
 sources:
   - id: posi-c
     resource: posi.c
@@ -37,7 +37,7 @@ POSIX only. OS-specific event APIs stay out: epoll, eventfd, timerfd, signalfd (
 
 # Module globals
 
-`last_errno` (int) and `allocations` (HashTable address → size). GINIT zeroes both, updates TSRM cache under ZTS. RINIT resets `last_errno`, inits `allocations`, updates TSRM cache. RSHUTDOWN `efree`s every live allocation, destroys table.[^header][^posi-c]
+`last_errno` (int), `allocations` (HashTable address → size) and `dl_handles` (HashTable handle → open count). GINIT zeroes them, updates TSRM cache under ZTS. RINIT resets `last_errno`, inits both tables, updates TSRM cache. RSHUTDOWN `efree`s every live allocation, `dlclose`s every handle still open ([shared libraries](/api/shared-libraries.md)), destroys the tables.[^header][^posi-c]
 
 # Load order
 

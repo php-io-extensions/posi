@@ -19,9 +19,11 @@
 #include "php_posi.h"
 #include "php_network.h"
 
+#include <dlfcn.h>
 #include <fcntl.h>
 #include <poll.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/param.h>
@@ -990,6 +992,90 @@ static bool posi_mem_range_ok(zend_long offset, zend_long length, zend_long size
 	return true;
 }
 
+/* {{{ Shared libraries
+ *
+ * dlopen() returns the handle as an int. dlsym() and dlclose() check it against the
+ * handles dlopen() returned and dlclose() has not given back, so a stale or foreign
+ * handle throws instead of reaching the loader. Handles still open at request end are closed then.
+ */
+
+static bool posi_dl_find(zend_long handle, uint32_t argnum)
+{
+	if (zend_hash_index_find(&POSI_G(dl_handles), (zend_ulong) handle) == NULL) {
+		zend_argument_value_error(argnum, "must be a handle dlopen() returned and dlclose() has not released");
+
+		return false;
+	}
+
+	return true;
+}
+
+ZEND_FUNCTION(dlopen)
+{
+	zend_string *file;
+	zend_long flags = RTLD_LAZY;
+	int fl;
+
+	ZEND_PARSE_PARAMETERS_START(1, 2)
+		Z_PARAM_PATH_STR(file)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(flags)
+	ZEND_PARSE_PARAMETERS_END();
+
+	POSI_ARG_INT(fl, flags, 2);
+
+	void *handle = dlopen(ZSTR_VAL(file), fl);
+	if (handle == NULL) {
+		RETURN_FALSE;
+	}
+	zval *open = zend_hash_index_find(&POSI_G(dl_handles), (zend_ulong) (uintptr_t) handle);
+	if (open != NULL) {
+		Z_LVAL_P(open)++;
+	} else {
+		zval entry;
+		ZVAL_LONG(&entry, 1);
+		zend_hash_index_add_new(&POSI_G(dl_handles), (zend_ulong) (uintptr_t) handle, &entry);
+	}
+	RETURN_LONG((zend_long) (uintptr_t) handle);
+}
+
+ZEND_FUNCTION(dlsym)
+{
+	zend_long handle;
+	zend_string *symbol;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_LONG(handle)
+		Z_PARAM_STR(symbol)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!posi_dl_find(handle, 1)) {
+		RETURN_THROWS();
+	}
+	/* The address as an int; 0 (NULL) where the library has no such symbol. */
+	RETURN_LONG((zend_long) (uintptr_t) dlsym((void *) (uintptr_t) handle, ZSTR_VAL(symbol)));
+}
+
+ZEND_FUNCTION(dlclose)
+{
+	zend_long handle;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(handle)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (!posi_dl_find(handle, 1)) {
+		RETURN_THROWS();
+	}
+	zval *open = zend_hash_index_find(&POSI_G(dl_handles), (zend_ulong) handle);
+	if (--Z_LVAL_P(open) == 0) {
+		zend_hash_index_del(&POSI_G(dl_handles), (zend_ulong) handle);
+	}
+	RETURN_LONG(dlclose((void *) (uintptr_t) handle));
+}
+
+/* }}} */
+
 ZEND_FUNCTION(posi_mem_alloc)
 {
 	zend_long size;
@@ -1025,8 +1111,73 @@ ZEND_FUNCTION(posi_mem_free)
 	if (posi_mem_find(ptr, 1) == NULL) {
 		RETURN_THROWS();
 	}
-	efree((void *) (uintptr_t) ptr);
+	if (zend_hash_index_exists(&POSI_G(aligned), (zend_ulong) ptr)) {
+		free((void *) (uintptr_t) ptr);
+		zend_hash_index_del(&POSI_G(aligned), (zend_ulong) ptr);
+	} else {
+		efree((void *) (uintptr_t) ptr);
+	}
 	zend_hash_index_del(&POSI_G(allocations), (zend_ulong) ptr);
+}
+
+/* <stdlib.h> posix_memalign(): memory at an alignment (a page, for a Metal buffer that wraps it). It is counted with the
+ * posi_mem_* buffers, so they read, write and free it; the C library owns it (it is not in memory_limit) and it is not zeroed. */
+ZEND_FUNCTION(posix_memalign)
+{
+	zval *memptr;
+	zend_long alignment, size;
+	void *p = NULL;
+	int rc;
+
+	ZEND_PARSE_PARAMETERS_START(3, 3)
+		Z_PARAM_ZVAL(memptr)
+		Z_PARAM_LONG(alignment)
+		Z_PARAM_LONG(size)
+	ZEND_PARSE_PARAMETERS_END();
+
+	if (alignment < 1) {
+		zend_argument_value_error(2, "must be greater than 0");
+		RETURN_THROWS();
+	}
+	if (size < 1) {
+		zend_argument_value_error(3, "must be greater than 0");
+		RETURN_THROWS();
+	}
+
+	rc = posix_memalign(&p, (size_t) alignment, (size_t) size);
+	if (rc != 0) {
+		/* the error is the return value, errno is left alone: keep it for posi_errno() */
+		errno = rc;
+		POSI_RECORD_ERRNO();
+		ZEND_TRY_ASSIGN_REF_LONG(memptr, 0);
+		RETURN_LONG(rc);
+	}
+	zval entry;
+	ZVAL_LONG(&entry, size);
+	zend_hash_index_add_new(&POSI_G(allocations), (zend_ulong) (uintptr_t) p, &entry);
+	ZVAL_TRUE(&entry);
+	zend_hash_index_add_new(&POSI_G(aligned), (zend_ulong) (uintptr_t) p, &entry);
+	ZEND_TRY_ASSIGN_REF_LONG(memptr, (zend_long) (uintptr_t) p);
+	RETURN_LONG(0);
+}
+
+/* <unistd.h> sysconf(): a system limit or option (_SC_PAGESIZE: the size of a page). -1 on error, with errno kept. */
+ZEND_FUNCTION(sysconf)
+{
+	zend_long name;
+	int n;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(name)
+	ZEND_PARSE_PARAMETERS_END();
+
+	POSI_ARG_INT(n, name, 1);
+	errno = 0;
+	long value = sysconf(n);
+	if (value == -1 && errno != 0) {
+		POSI_RECORD_ERRNO();
+	}
+	RETURN_LONG((zend_long) value);
 }
 
 ZEND_FUNCTION(posi_mem_write)
@@ -1101,6 +1252,8 @@ static PHP_GINIT_FUNCTION(posi)
 #endif
 	posi_globals->last_errno = 0;
 	memset(&posi_globals->allocations, 0, sizeof(posi_globals->allocations));
+	memset(&posi_globals->aligned, 0, sizeof(posi_globals->aligned));
+	memset(&posi_globals->dl_handles, 0, sizeof(posi_globals->dl_handles));
 }
 
 PHP_MINIT_FUNCTION(posi)
@@ -1361,6 +1514,8 @@ PHP_RINIT_FUNCTION(posi)
 #endif
 	POSI_G(last_errno) = 0;
 	zend_hash_init(&POSI_G(allocations), 8, NULL, NULL, 0);
+	zend_hash_init(&POSI_G(aligned), 8, NULL, NULL, 0);
+	zend_hash_init(&POSI_G(dl_handles), 8, NULL, NULL, 0);
 
 	return SUCCESS;
 }
@@ -1370,9 +1525,23 @@ PHP_RSHUTDOWN_FUNCTION(posi)
 	zend_ulong address;
 
 	ZEND_HASH_FOREACH_NUM_KEY(&POSI_G(allocations), address) {
-		efree((void *) (uintptr_t) address);
+		if (zend_hash_index_exists(&POSI_G(aligned), address)) {
+			free((void *) (uintptr_t) address);
+		} else {
+			efree((void *) (uintptr_t) address);
+		}
 	} ZEND_HASH_FOREACH_END();
 	zend_hash_destroy(&POSI_G(allocations));
+	zend_hash_destroy(&POSI_G(aligned));
+
+	zend_ulong handle;
+	zval *open;
+	ZEND_HASH_FOREACH_NUM_KEY_VAL(&POSI_G(dl_handles), handle, open) {
+		for (zend_long times = Z_LVAL_P(open); times > 0; times--) {
+			dlclose((void *) (uintptr_t) handle);
+		}
+	} ZEND_HASH_FOREACH_END();
+	zend_hash_destroy(&POSI_G(dl_handles));
 
 	return SUCCESS;
 }

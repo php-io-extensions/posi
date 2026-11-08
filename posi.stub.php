@@ -108,6 +108,68 @@ function posi_mem_write(int $ptr, string $data, int $offset = 0): void {}
 
 function posi_mem_read(int $ptr, int $size, int $offset = 0): string {}
 
+/* <stdlib.h>, <unistd.h>: aligned memory, and the size of a page to align it to */
+
+function posix_memalign(?int &$memptr, int $alignment, int $size): int {}
+
+function sysconf(int $name): int {}
+
+#ifdef _SC_PAGESIZE
+/**
+ * @var int
+ * @cvalue _SC_PAGESIZE
+ */
+const _SC_PAGESIZE = UNKNOWN;
+#endif
+
+#ifdef _SC_PAGE_SIZE
+/**
+ * @var int
+ * @cvalue _SC_PAGE_SIZE
+ */
+const _SC_PAGE_SIZE = UNKNOWN;
+#endif
+
+/* <dlfcn.h>: shared libraries. A handle is an int; dlsym() answers an address as an int, 0 for no such symbol. */
+
+function dlopen(string $file, int $flags = RTLD_LAZY): int|false {}
+
+function dlsym(int $handle, string $symbol): int {}
+
+function dlclose(int $handle): int {}
+
+#ifdef RTLD_LAZY
+/**
+ * @var int
+ * @cvalue RTLD_LAZY
+ */
+const RTLD_LAZY = UNKNOWN;
+#endif
+
+#ifdef RTLD_NOW
+/**
+ * @var int
+ * @cvalue RTLD_NOW
+ */
+const RTLD_NOW = UNKNOWN;
+#endif
+
+#ifdef RTLD_GLOBAL
+/**
+ * @var int
+ * @cvalue RTLD_GLOBAL
+ */
+const RTLD_GLOBAL = UNKNOWN;
+#endif
+
+#ifdef RTLD_LOCAL
+/**
+ * @var int
+ * @cvalue RTLD_LOCAL
+ */
+const RTLD_LOCAL = UNKNOWN;
+#endif
+
 /* errno of the last posi call that failed */
 
 function posi_errno(): int {}

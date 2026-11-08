@@ -4,8 +4,10 @@ PHP_ARG_ENABLE([posi],
   [no])
 
 if test "$PHP_POSI" != "no"; then
-  AC_CHECK_HEADERS([fcntl.h poll.h termios.h sys/uio.h sys/wait.h], [],
-    [AC_MSG_ERROR([posi requires the POSIX headers fcntl.h, poll.h, termios.h, sys/uio.h and sys/wait.h])])
+  AC_CHECK_HEADERS([fcntl.h poll.h termios.h sys/uio.h sys/wait.h dlfcn.h], [],
+    [AC_MSG_ERROR([posi requires the POSIX headers fcntl.h, poll.h, termios.h, sys/uio.h, sys/wait.h and dlfcn.h])])
+  PHP_CHECK_LIBRARY([dl], [dlopen], [PHP_ADD_LIBRARY([dl],, POSI_SHARED_LIBADD)])
+  PHP_SUBST([POSI_SHARED_LIBADD])
   PHP_NEW_EXTENSION([posi], [posi.c posi_termios.c], [$ext_shared],, [-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1])
   PHP_ADD_EXTENSION_DEP([posi], [posix])
 fi

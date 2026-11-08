@@ -700,6 +700,36 @@ posi_set_baud_rate($fd, 250000);   // DMX: fine on Linux, EINVAL on macOS
 
 ---
 
+### Shared libraries
+
+`dlfcn.h`, 1:1. `dlopen()` returns the loader's handle as an int and `dlsym()` returns a symbol's address as an int, so an address can be compared with another library's answer or handed to a call that takes a function pointer. Both check the handle against the handles `dlopen()` returned and `dlclose()` has not released, so a stale or foreign handle throws `ValueError` instead of reaching the loader. A library `dlopen()` opened twice stays loaded until `dlclose()` runs twice. Handles still open at request end are closed then.
+
+#### `dlopen(string $file, int $flags = RTLD_LAZY): int|false`
+
+Opens `$file` and returns its handle, or `false` when the loader cannot open it. Flags are `RTLD_LAZY` or `RTLD_NOW`, with `RTLD_LOCAL` or `RTLD_GLOBAL`.
+
+---
+
+#### `dlsym(int $handle, string $symbol): int`
+
+Returns the address of `$symbol` in the library, or `0` when it has none.
+
+---
+
+#### `dlclose(int $handle): int`
+
+Gives one open of the handle back and returns `0` on success.
+
+**Example**
+
+```php
+$libc = dlopen('/usr/lib/libSystem.B.dylib', RTLD_LAZY | RTLD_LOCAL);
+$getpid = dlsym($libc, 'getpid');   // an address, > 0
+dlclose($libc);
+```
+
+---
+
 ### Native buffers
 
 Some `ioctl()` requests, `I2C_RDWR` and `SPI_IOC_MESSAGE` among them, take a struct that holds pointers to further buffers. A PHP string has no stable address the kernel can be handed, so posi allocates request memory and gives you its address as an int to `pack('P', ...)` into the struct. Every address is checked against the live allocations before any memory is touched, so a foreign, freed or out-of-range access throws `ValueError` instead of crashing. Buffers still allocated when the request ends are freed then. The registry guards posi's own access only: an address packed into a struct goes to the kernel unchecked, and struct layout (padding, pointer width) is yours to get right.
@@ -707,6 +737,18 @@ Some `ioctl()` requests, `I2C_RDWR` and `SPI_IOC_MESSAGE` among them, take a str
 #### `posi_mem_alloc(int $size): int`
 
 Allocates `$size` zeroed bytes and returns their address. `$size` below `1` throws `ValueError`. The memory counts against `memory_limit`.
+
+---
+
+#### `posix_memalign(?int &$memptr, int $alignment, int $size): int`
+
+`stdlib.h`. Allocates `$size` bytes at an `$alignment` (a power of two and a multiple of the pointer size) and gives the address in `$memptr`. Returns `0`, or the error (`EINVAL`, `ENOMEM`; `$memptr` is then `0`). The memory is not zeroed and the C library owns it (it does not count against `memory_limit`); the `posi_mem_*` functions read, write and free it like any other buffer. `$alignment` or `$size` below `1` throws `ValueError`.
+
+---
+
+#### `sysconf(int $name): int`
+
+`unistd.h`. A system limit or option; `_SC_PAGESIZE` (also `_SC_PAGE_SIZE`) is the size of a page, the alignment memory needs to be wrapped without a copy. `-1` for an error, with errno kept for `posi_errno()`.
 
 ---
 
